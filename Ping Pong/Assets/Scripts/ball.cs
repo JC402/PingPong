@@ -16,7 +16,12 @@ public class ball : MonoBehaviour
     // Respawn ball in the center moving in a random direction
     void respawnBall() {
         rb.MovePosition(Vector2.zero);
-        setDirAng(Random.Range(0f, 2f * Mathf.PI));
+        // Generate random angles such that ball doesn't go straight up or down
+        float randAng = Random.Range(-Mathf.PI/4f, Mathf.PI/4f);
+        if (Random.value > 0.5)
+            setDirAng(randAng);
+        else
+            setDirAng(randAng + Mathf.PI);
     }
 
     // Start is called before the first frame update
