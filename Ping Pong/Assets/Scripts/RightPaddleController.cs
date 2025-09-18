@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class LeftPaddleController : MonoBehaviour
+public class RightPaddleController : MonoBehaviour
 {
     Rigidbody2D pad;
     Vector2 initial;
@@ -16,10 +16,10 @@ public class LeftPaddleController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((Input.GetKey(KeyCode.Q))) {
+        if ((Input.GetKey(KeyCode.O))) {
             if (initial.y <= 4)
                 initial.y += displacement;
-        } else if((Input.GetKey(KeyCode.A))) {
+        } else if((Input.GetKey(KeyCode.L))) {
             if (initial.y > -4)
                 initial.y -= displacement;
         }
