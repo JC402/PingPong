@@ -2,20 +2,31 @@ using UnityEngine;
 
 public class ball : MonoBehaviour
 {
-    // Start is called before the first frame update
     Rigidbody2D rb;
     public float speed;
-    public float respawnAngle;
     Vector2 direction;
-    public scoreManager score;
+    scoreManager score;
 
+    // Sets ball direction to normalized vector, angle in radians
+    void setDirAng(float angle) {
+        direction.x = Mathf.Cos(angle);
+        direction.y = Mathf.Sin(angle);
+    }
+
+    // Respawn ball in the center moving in a random direction
+    void respawnBall() {
+        rb.MovePosition(Vector2.zero);
+        setDirAng(Random.Range(0f, 2f * Mathf.PI));
+    }
+
+    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        respawnAngle *= Mathf.PI / 180f; // Convert to radians
-        direction = new Vector2(Mathf.Cos(respawnAngle), Mathf.Sin(respawnAngle));
         score = GameObject.FindGameObjectWithTag("logic").GetComponent<scoreManager>();
+        respawnBall();
     }
+
     // Update is called once per frame
     void Update()
     {
@@ -28,11 +39,14 @@ public class ball : MonoBehaviour
         else if (collison.gameObject.CompareTag("topWall"))
             direction.y = -direction.y;
         else if (collison.gameObject.CompareTag("leftWall")) {
-            rb.MovePosition(Vector2.zero);
-            score.addRight();
+            respawnBall();
+            // Add 1 to score and end game if right player won
+            if (score.addRight() == 1)
+                gameObject.SetActive(false);
         } else if (collison.gameObject.CompareTag("rightWall")) {
-            rb.MovePosition(Vector2.zero);
-            score.addLeft();
+            respawnBall();
+            if (score.addLeft() == 1)
+                gameObject.SetActive(false);
         }
     }
 }
